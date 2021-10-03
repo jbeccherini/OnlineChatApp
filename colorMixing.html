@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="colorMixingStyle.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Color Mixing Prototype</h1>
+    <div id="colorButtons">
+        <button id="red" onclick="addColor('red');">RED</button>
+        <button id="yellow" onclick="addColor('yellow');">YELLOW</button>
+        <button id="blue" onclick="addColor('blue');">BLUE</button>
+    </div>
+    <div id="mixingBox">
+        <div id="mix5"></div>
+        <div id="mix4"></div>
+        <div id="mix3"></div>
+        <div id="mix2"></div>
+        <div id="mix1"></div>
+    </div>
+    <button id="mixButton" disabled="true" onclick="mix();">MIX!</button>
+    <button id="resetButton" onclick="resetColors();">RESET!</button>
+</body>
+
+    <script>
+        const colors = [];
+        var maxColors = 5;
+
+        function addColor(newColor) {
+            colors.push(newColor);
+            updateColors();
+            checkDisabled();
+        }
+
+        function mixColors() {
+            var element = document.getElementById("mixingBox");
+            element.classList.remove("shaking"); 
+
+            var r = colors.filter((x) => x === "red").length;
+            var y = colors.filter((x) => x === "yellow").length;
+            var b = colors.filter((x) => x === "blue").length;
+
+            var max = Math.max(r, y, b);
+
+            r /= max;
+            y /= max;
+            b /= max;
+
+            r *= 255;
+            y *= 255;
+            b *= 255;
+
+            console.log("RYB", r, y, b);
+            ryb2rgb(r, y, b);
+        }
+
+        function ryb2rgb(r, y, b) {
+            var w = Math.min(r, y, b);
+            r -= w;
+            y -= w;
+            b -= w;
+
+            var my = Math.max(r, y, b);
+
+            var g = Math.min(y, b);
+            y -= g;
+            b -= g;
+
+            if (b != 0 && g != 0) {
+                b *= 2.0;
+                g *= 2.0;
+            }
+
+            r += y;
+            g += y;
+
+            var mg = Math.max(r, g, b);
+            if (mg != 0) {
+                var n = my / mg;
+                r *= n;
+                g *= n;
+                b *= n;
+            }
+
+            r += w;
+            g += w;
+            b += w;
+
+            r = Math.round(r);
+            g = Math.round(g);
+            b = Math.round(b);
+
+            console.log("RGB", r, g, b);
+
+            var color = rgbToHex(r, g, b);
+
+            var element = document.getElementById("mixingBox");
+            element.classList.remove("shaking"); 
+            for(var i = 0; i < element.children.length; i++)
+            {
+                element.children[i].style.background = color;
+            }
+        }
+
+        function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        }
+
+        function mix()
+        {
+            var element = document.getElementById("mixingBox");
+            element.classList.add("shaking");
+            setTimeout(() => mixColors(), 1000);
+        }
+
+        function updateColors()
+        {
+            var element = document.getElementById("mixingBox");
+            for(var i = 0; i < element.children.length; i++)
+            {
+                if(i in colors)
+                element.children[4 - i].style.background = colors[i];
+            }
+        }
+
+        function resetColors() 
+        {
+            var element = document.getElementById("mixingBox");
+            for(var i = 0; i < element.children.length; i++)
+            {
+                element.children[i].style.background = 'white';
+            }
+            colors.length = 0;
+            checkDisabled();
+        }
+
+        function checkDisabled() 
+        {
+            var element = document.getElementById("colorButtons");
+            if(colors.length === maxColors)
+            {
+                for(var i = 0; i < element.children.length; i++)
+                {
+                    element.children[i].disabled = true;
+                }
+            }
+            else
+            {
+                for(var i = 0; i < element.children.length; i++)
+                {
+                    element.children[i].disabled = false;
+                }
+            }
+            
+            var mixButton = document.getElementById("mixButton");
+            if(colors.length < 2)
+            {
+                mixButton.disabled = true;
+            }
+            else
+            {
+                mixButton.disabled = false;
+            }
+        }
+
+    </script>
+</html>
