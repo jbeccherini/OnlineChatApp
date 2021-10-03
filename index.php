@@ -40,7 +40,7 @@ function loginForm(){
     <head>
         <meta charset="utf-8" />
 
-        <title>Tuts+ Chat Application</title>
+        <title>Online Chat App</title>
         <meta name="description" content="Tuts+ Chat Application" />
         <link rel="stylesheet" href="style.css" />
     </head>
@@ -54,8 +54,8 @@ function loginForm(){
         <div id="wrapper">
             <div id="menu">
                 <p class="welcome">Welcome, <b><?php echo $_SESSION['name']; ?></b></p>
-                <a href="colorMixing.html">
-                <p class="logout"><a id="exit" href="#">Exit Chat</a></p>
+                <p class="headerLinks"><a id="game" href="colorMixing.html">Color Mixing</a></p>
+                <p class="headerLinks"><a id="exit" href="#">Exit Chat</a></p>
             </div>
 
             <div id="chatbox">
