@@ -54,6 +54,7 @@ function loginForm(){
         <div id="wrapper">
             <div id="menu">
                 <p class="welcome">Welcome, <b><?php echo $_SESSION['name']; ?></b></p>
+                <a href="colorMixing.html">
                 <p class="logout"><a id="exit" href="#">Exit Chat</a></p>
             </div>
 
